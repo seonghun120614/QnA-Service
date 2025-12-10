@@ -1,0 +1,53 @@
+services:
+  front-server:
+    build:
+      context: ./qna-react/
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./qna-react/.env.dev
+    ports:
+      - "5176:5176"
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./qna-react:/app          # 소스 코드 실시간 반영
+      - /app/node_modules
+    restart: unless-stopped
+
+  back-server:
+    build:
+      context: ./qna-spring/
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./qna-spring/.env.dev
+    ports:
+      - "8080:8080"
+    networks: 
+      - back-db
+    depends_on:
+      db-server:
+        condition: service_healthy
+    volumes:
+      - ./qna-spring/src:/app/src
+
+  db-server:
+    build:
+      context: ./qna-mysql/
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./qna-mysql/.env.dev
+    ports:
+      - "3306:3306"
+    networks:
+      - back-db
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"] # 비밀번호 없이 체크
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped # always 와 같지만 수동으로 중지한 경우 재시작 안함
+
+networks:
+  back-db:
+    driver: bridge

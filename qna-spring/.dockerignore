@@ -1,0 +1,52 @@
+# Gradle
+.gradle
+build
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# IDE
+.idea
+.vscode
+*.iml
+*.ipr
+*.iws
+.settings
+.classpath
+.project
+bin
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# 로그
+logs
+*.log
+
+# 테스트
+out
+
+# 환경 변수
+.env.local
+.env.*.local
+.env.production
+
+# 문서
+README.md
+CHANGELOG.md
+LICENSE
+*.md
+
+# CI/CD
+.github
+.gitlab-ci.yml
+
+# 기타
+.dockerignore
+Dockerfile*
+docker-compose*.yml
